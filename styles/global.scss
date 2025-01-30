@@ -1,0 +1,26 @@
+:root {
+    --color-site-bg: #fff;
+    --color-text: #000;
+}
+
+html {
+    font-family: sans-serif;
+    font-size: 16px;
+    scroll-behavior: smooth;
+    background-color: var(--color-site-bg);
+    color: var(--color-text);
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}

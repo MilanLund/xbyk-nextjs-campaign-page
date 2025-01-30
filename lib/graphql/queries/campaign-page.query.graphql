@@ -1,0 +1,42 @@
+query CampaignPage {
+    dancingGoatCampaignPage {
+        banner {
+            items {
+                bannerHeaderText
+                bannerText
+                bannerBackgroundImage {
+                    items {
+                        imageShortDescription
+                        imageFile {
+                            fileSize
+                            fileType
+                            height
+                            name
+                            path
+                            width
+                        }
+                        _system {
+                            contentType
+                            firstPublished
+                            id
+                            languageName
+                            languageVariantId
+                            lastPublished
+                        }
+                    }
+                    skip
+                    take
+                    totalCount
+                }
+                _system {
+                    id
+                    lastPublished
+                    contentType
+                    firstPublished
+                    languageName
+                    languageVariantId
+                }
+            }
+        }
+    }
+}
