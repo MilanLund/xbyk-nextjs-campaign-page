@@ -23,7 +23,7 @@ class ApolloService {
         });
     }
 
-    public query<T>(options: Parameters<typeof this.client.query<T>>[0]) {
+    query<T>(options: Parameters<typeof this.client.query<T>>[0]) {
         return this.client.query<T>(options);
     }
 }

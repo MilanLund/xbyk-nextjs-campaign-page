@@ -36,23 +36,10 @@ class ConsentApiService {
         };
     }
 
-    private async fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
-        const response = await fetch(`${this.API_BASE}${endpoint}`, {
-            ...options,
-            headers: this.DEFAULT_HEADERS,
-            cache: 'no-store'
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(`API Error (${response.status}): ${error}`);
-        }
-
-        return response.json();
-    }
-
     async getConsentText(languageName: string = 'en'): Promise<ConsentText> {
-        return this.fetchApi<ConsentText>(`/consents/${this.CONSENT_NAME}?languageName=${encodeURIComponent(languageName)}`);
+        return this.fetchApi<ConsentText>(`/consents/${this.CONSENT_NAME}?languageName=${encodeURIComponent(languageName)}`, {
+            cache: 'force-cache'
+        });
     }
 
     async createContact(): Promise<Contact> {
@@ -67,6 +54,20 @@ class ConsentApiService {
         }
 
         return this.fetchApi<ConsentStatus>(`/contacts/${encodeURIComponent(contactGuid)}/consents/${this.CONSENT_NAME}`);
+    }
+
+    private async fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
+        const response = await fetch(`${this.API_BASE}${endpoint}`, {
+            headers: this.DEFAULT_HEADERS,
+            ...options
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`API Error (${response.status}): ${error}`);
+        }
+
+        return response.json();
     }
 }
 

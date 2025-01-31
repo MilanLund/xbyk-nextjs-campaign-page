@@ -9,7 +9,7 @@ html {
     scroll-behavior: smooth;
     background-color: var(--color-site-bg);
     color: var(--color-text);
-
+    line-height: 1.5em;
     * {
         box-sizing: border-box;
     }
@@ -23,4 +23,22 @@ body {
         max-width: 100%;
         height: auto;
     }
+}
+
+.page {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 2em 1em;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
