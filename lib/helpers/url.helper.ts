@@ -1,7 +1,7 @@
-import { SITE_URL, XBYK_GRAPHQL_ENDPOINT_HOST } from '../environment';
+import { SITE_URL, XBYK_HOST } from '../environment';
 
 export function toAbsoluteUrl(path: string, type?: 'graphql' | 'site'): string {
-    const host = type === 'graphql' ? XBYK_GRAPHQL_ENDPOINT_HOST : SITE_URL;
+    const host = type === 'graphql' ? XBYK_HOST : SITE_URL;
     return `${host}/${unifyUrlPath(path)}`;
 }
 

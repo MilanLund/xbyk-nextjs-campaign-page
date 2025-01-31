@@ -4,8 +4,8 @@ A Next.js project with TypeScript, GraphQL, and Apollo Client integration fetchi
 
 ## Prerequisites
 
--   Node.js >= 20.0.0
--   npm
+- Node.js >= 20.0.0
+- npm
 
 ## Environment Variables
 
@@ -13,7 +13,7 @@ Create a `.env.local` file in the root directory with the following variables:
 
 ```
 SITE_URL=your_site_url
-XBYK_GRAPHQL_ENDPOINT_HOST=your_graphql_host
+XBYK_HOST=your_graphql_host
 XBYK_GRAPHQL_ENDPOINT_PATH=your_graphql_path
 XBYK_GRAPHQL_API_KEY=your_api_key
 ```
@@ -50,7 +50,7 @@ npm install
 ```
 
 2. Run the application:
-2a. Development mode:
+   2a. Development mode:
 
 ```bash
 npm run dev
@@ -67,11 +67,11 @@ npm run start
 
 ## Project Structure
 
--   `/app`: Next.js 13+ app directory containing page components
--   `/components`: Reusable React components
--   `/lib`: Utility functions, services, and GraphQL related code
--   `/styles`: Global styles and CSS modules
--   `/public`: Static assets
+- `/app`: Next.js 13+ app directory containing page components
+- `/components`: Reusable React components
+- `/lib`: Utility functions, services, and GraphQL related code
+- `/styles`: Global styles and CSS modules
+- `/public`: Static assets
 
 ## Xperience by Kentico setup
 
