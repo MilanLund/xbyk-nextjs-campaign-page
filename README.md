@@ -18,6 +18,29 @@ XBYK_GRAPHQL_ENDPOINT_PATH=your_graphql_path
 XBYK_GRAPHQL_API_KEY=your_api_key
 ```
 
+## Generate types
+
+Create a `codegen.yml` file in the root directory with the following content, placeholder values are the ones from the `.env.local` file:
+
+```
+schema:
+    - '<XBYK_GRAPHQL_ENDPOINT_HOST><XBYK_GRAPHQL_ENDPOINT_PATH>': # Replace with your GraphQL endpoint
+          headers:
+              Authorization: 'Bearer <XBYK_GRAPHQL_API_KEY>' # Authentication is needed
+documents: 'lib/graphql/queries/**/*.graphql' # Path to your GraphQL operations
+generates:
+    lib/graphql/models/types.ts:
+        plugins:
+            - 'typescript'
+            - 'typescript-operations'
+```
+
+Run the codegen script:
+
+```bash
+npm run codegen
+```
+
 ## Running the project
 
 1. Install dependencies:
@@ -26,10 +49,18 @@ XBYK_GRAPHQL_API_KEY=your_api_key
 npm install
 ```
 
-2. Run the development server:
+2. Run the application:
+2a. Development mode:
 
 ```bash
 npm run dev
+```
+
+2b. Production mode:
+
+```bash
+npm run build
+npm run start
 ```
 
 3. Open your browser and navigate to `http://localhost:3000` to see the app.
@@ -40,6 +71,7 @@ npm run dev
 -   `/components`: Reusable React components
 -   `/lib`: Utility functions, services, and GraphQL related code
 -   `/styles`: Global styles and CSS modules
+-   `/public`: Static assets
 
 ## Xperience by Kentico setup
 
