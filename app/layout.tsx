@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 import '../styles/global.scss';
+import { ConsentManagerComponent } from '../components/consent-manager/consent-manager.component';
 
 export interface INextJsRootData {
     children: React.ReactNode;
@@ -10,6 +11,7 @@ export default function RootLayout(data: INextJsRootData): JSX.Element {
         <html lang="en">
             <body>
                 <main>{data.children}</main>
+                <ConsentManagerComponent />
             </body>
         </html>
     );

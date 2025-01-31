@@ -13,7 +13,7 @@ Create a `.env.local` file in the root directory with the following variables:
 
 ```
 SITE_URL=your_site_url
-XBYK_GRAPHQL_ENDPOINT_HOST=your_graphql_host
+XBYK_HOST=your_graphql_host
 XBYK_GRAPHQL_ENDPOINT_PATH=your_graphql_path
 XBYK_GRAPHQL_API_KEY=your_api_key
 ```
