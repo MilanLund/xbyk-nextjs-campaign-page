@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createContact } from '../../lib/server-actions/consent-api.server-action';
+import { createContact, updateContactConsent } from '../../lib/server-actions/consent-api.server-action';
 import { consentManagementService } from '../../lib/services/consent-management.service';
 import styles from './consent.module.scss';
 
@@ -17,7 +17,7 @@ export function ConsentManagerComponent() {
         setIsLoading(false);
     }, []);
 
-    const handleConsentChange = async (newConsentValue: boolean) => {
+    async function handleConsentChange(newConsentValue: boolean) {
         try {
             const storedState = consentManagementService.getStoredState();
             let contactGuid = storedState?.contactGuid;
@@ -27,6 +27,8 @@ export function ConsentManagerComponent() {
                 contactGuid = contact.contact;
             }
 
+            await updateContactConsent(contactGuid, { agree: newConsentValue });
+
             consentManagementService.storeState({
                 contactGuid,
                 hasConsent: newConsentValue
@@ -34,9 +36,21 @@ export function ConsentManagerComponent() {
 
             setHasConsent(newConsentValue);
         } catch (error) {
-            console.error('Error updating consent:', error);
+            console.error('Error updating consent:', error, 'Creating new contact...');
+
+            try {
+                const newContact = await createContact();
+                await updateContactConsent(newContact.contact, { agree: newConsentValue });
+                consentManagementService.storeState({
+                    contactGuid: newContact.contact,
+                    hasConsent: newConsentValue
+                });
+                setHasConsent(newConsentValue);
+            } catch (error) {
+                console.error('Error creating new contact:', error);
+            }
         }
-    };
+    }
 
     if (isLoading) {
         return <div>Loading...</div>;

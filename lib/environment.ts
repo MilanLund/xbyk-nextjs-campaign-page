@@ -6,3 +6,4 @@ export const XBYK_HOST: string = getEnvironmentRequiredValue('XBYK_HOST');
 export const XBYK_GRAPHQL_ENDPOINT_PATH: string = getEnvironmentRequiredValue('XBYK_GRAPHQL_ENDPOINT_PATH');
 export const XBYK_GRAPHQL_API_KEY: string = getEnvironmentRequiredValue('XBYK_GRAPHQL_API_KEY');
 export const XBYK_TRACKING_API_KEY: string = getEnvironmentRequiredValue('XBYK_TRACKING_API_KEY');
+export const XBYK_TRACKING_CHANNEL_GUID: string = getEnvironmentRequiredValue('XBYK_TRACKING_CHANNEL_GUID');

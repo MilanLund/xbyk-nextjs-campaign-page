@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import { DancingGoatBanner } from '../../lib/graphql/models/types';
 import { toAbsoluteUrl } from '../../lib/helpers/url.helper';
+import { ButtonComponent } from '../button/button.component';
 import styles from './banner.module.scss';
 
 interface BannerProps {
@@ -18,6 +19,7 @@ export function BannerComponent({ item }: BannerProps): JSX.Element {
         <div className={styles.root} style={style}>
             <h1 className={styles.heading}>{item.bannerHeaderText}</h1>
             <p className={styles.text}>{item.bannerText}</p>
+            <ButtonComponent>Click me</ButtonComponent>
         </div>
     );
 }

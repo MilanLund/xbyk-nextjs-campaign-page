@@ -1,15 +1,19 @@
 'use server';
 
-import { consentApiService } from '../services/consent-api.service';
+import { consentApiService, ConsentStatusPost } from '../services/consent-api.service';
 
 export async function getConsentText(languageName: string = 'en') {
-    return consentApiService.getConsentText(languageName);
+    return await consentApiService.getConsentText(languageName);
 }
 
 export async function createContact() {
-    return consentApiService.createContact();
+    return await consentApiService.createContact();
 }
 
 export async function getContactConsent(contactGuid: string) {
-    return consentApiService.getContactConsent(contactGuid);
+    return await consentApiService.getContactConsent(contactGuid);
+}
+
+export async function updateContactConsent(contactGuid: string, consentStatus: ConsentStatusPost) {
+    await consentApiService.updateContactConsent(contactGuid, consentStatus);
 }

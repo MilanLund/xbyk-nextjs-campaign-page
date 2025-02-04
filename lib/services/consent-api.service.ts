@@ -4,8 +4,12 @@ export interface Contact {
     contact: string;
 }
 
-export interface ConsentStatus {
-    agreed: boolean;
+export interface ConsentStatusGet {
+    isAgreed: boolean;
+}
+
+export interface ConsentStatusPost {
+    agree: boolean;
 }
 
 export interface ConsentState {
@@ -13,14 +17,9 @@ export interface ConsentState {
     hasConsent?: boolean;
 }
 
-interface ConsentText {
+export interface ConsentText {
     shortText: string;
     fullText: string;
-}
-
-interface ApiResponse<T> {
-    data: T;
-    error?: string;
 }
 
 class ConsentApiService {
@@ -37,23 +36,38 @@ class ConsentApiService {
     }
 
     async getConsentText(languageName: string = 'en'): Promise<ConsentText> {
-        return this.fetchApi<ConsentText>(`/consents/${this.CONSENT_NAME}?languageName=${encodeURIComponent(languageName)}`, {
+        return await this.fetchApi<ConsentText>(`/consents/${this.CONSENT_NAME}?languageName=${encodeURIComponent(languageName)}`, {
             cache: 'force-cache'
         });
     }
 
     async createContact(): Promise<Contact> {
-        return this.fetchApi<Contact>('/contacts', {
+        return await this.fetchApi<Contact>('/contacts', {
             method: 'POST'
         });
     }
 
-    async getContactConsent(contactGuid: string): Promise<ConsentStatus> {
+    async getContactConsent(contactGuid: string): Promise<ConsentStatusGet> {
         if (!contactGuid) {
             throw new Error('Contact GUID is required');
         }
 
-        return this.fetchApi<ConsentStatus>(`/contacts/${encodeURIComponent(contactGuid)}/consents/${this.CONSENT_NAME}`);
+        return await this.fetchApi<ConsentStatusGet>(`/contacts/${encodeURIComponent(contactGuid)}/consents/${this.CONSENT_NAME}`);
+    }
+
+    async updateContactConsent(contactGuid: string, consentStatus: ConsentStatusPost): Promise<void> {
+        if (!contactGuid) {
+            throw new Error('Contact GUID is required');
+        }
+
+        if (!consentStatus) {
+            throw new Error('Consent status is required');
+        }
+
+        await this.fetchApi<undefined>(`/contacts/${encodeURIComponent(contactGuid)}/consents/${this.CONSENT_NAME}`, {
+            method: 'POST',
+            body: JSON.stringify(consentStatus)
+        });
     }
 
     private async fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -67,7 +81,12 @@ class ConsentApiService {
             throw new Error(`API Error (${response.status}): ${error}`);
         }
 
-        return response.json();
+        if (response.headers.get('content-length') === '0') {
+            return undefined as T;
+        }
+
+        const data: T = await response.json();
+        return data;
     }
 }
 

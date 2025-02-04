@@ -1,7 +1,10 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { createContact, getConsentText, getContactConsent } from '../../lib/server-actions/consent-api.server-action';
+import { createContact, getConsentText, updateContactConsent } from '../../lib/server-actions/consent-api.server-action';
+import { trackPageVisit } from '../../lib/server-actions/tracking-api.server-action';
 import { consentManagementService } from '../../lib/services/consent-management.service';
 import styles from './consent.module.scss';
 
@@ -9,12 +12,20 @@ export function ConsentBannerComponent() {
     const [consentText, setConsentText] = useState<string>('');
     const [showBanner, setShowBanner] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const pathname = usePathname();
 
     useEffect(() => {
         (async () => {
             await checkConsentStatus();
         })();
     }, []);
+
+    function shouldShowBanner() {
+        if (pathname.endsWith('privacy-policy')) {
+            return false;
+        }
+        return true;
+    }
 
     async function checkConsentStatus() {
         try {
@@ -27,17 +38,9 @@ export function ConsentBannerComponent() {
                 return;
             }
 
-            if (!storedState.contactGuid) {
-                setShowBanner(false);
+            if (storedState.hasConsent && storedState.contactGuid) {
                 return;
             }
-
-            const status = await getContactConsent(storedState.contactGuid);
-            consentManagementService.storeState({
-                contactGuid: storedState.contactGuid,
-                hasConsent: status.agreed
-            });
-            setShowBanner(false);
         } catch (error) {
             console.error('Error in consent flow:', error);
         } finally {
@@ -45,32 +48,35 @@ export function ConsentBannerComponent() {
         }
     }
 
-    // Use error boundaries instead of try-catch where possible
-    const handleAccept = async () => {
+    async function handleAccept() {
         try {
             const contact = await createContact();
+            await updateContactConsent(contact.contact, { agree: true });
             consentManagementService.storeState({
                 contactGuid: contact.contact,
                 hasConsent: true
             });
             setShowBanner(false);
-            // Here you would initialize your tracking
+            await trackPageVisit({
+                url: pathname,
+                contactGuid: contact.contact,
+                title: document.title
+            });
         } catch (error) {
             console.error('Error accepting consent:', error);
         }
-    };
+    }
 
-    const handleDecline = () => {
+    function handleDecline() {
         consentManagementService.setDeclined();
         setShowBanner(false);
-    };
+    }
 
-    const handleClose = () => {
+    function handleClose() {
         setShowBanner(false);
-    };
+    }
 
-    // Early return pattern for loading and hidden states
-    if (isLoading || !showBanner) {
+    if (isLoading || !showBanner || !shouldShowBanner()) {
         return null;
     }
 
@@ -85,6 +91,9 @@ export function ConsentBannerComponent() {
                     <button onClick={handleDecline} className={`${styles.button} ${styles.declineButton}`}>
                         Decline
                     </button>
+                    <Link className={styles.link} href="/privacy-policy">
+                        Privacy Policy
+                    </Link>
                 </div>
             </div>
             <button onClick={handleClose} className={`${styles.button} ${styles.closeButton}`}>
