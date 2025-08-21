@@ -1,5 +1,5 @@
 import { HttpLink } from '@apollo/client';
-import { ApolloClient, InMemoryCache, registerApolloClient } from '@apollo/experimental-nextjs-app-support';
+import { ApolloClient, InMemoryCache, registerApolloClient } from '@apollo/client-integration-nextjs';
 import { XBYK_GRAPHQL_API_KEY, XBYK_GRAPHQL_ENDPOINT_PATH } from '../environment';
 import { toAbsoluteUrl } from '../helpers/url.helper';
 
@@ -13,9 +13,7 @@ class ApolloService {
                 link: new HttpLink({
                     // this needs to be an absolute url, as relative urls cannot be used in SSR
                     uri: toAbsoluteUrl(XBYK_GRAPHQL_ENDPOINT_PATH, 'graphql'),
-                    headers: {
-                        authorization: `Bearer ${XBYK_GRAPHQL_API_KEY}`
-                    },
+                    headers: { authorization: `Bearer ${XBYK_GRAPHQL_API_KEY}` },
                     // revalidate cache after 30 seconds
                     fetchOptions: { next: { revalidate: 30 } }
                 })

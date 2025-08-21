@@ -50,7 +50,8 @@ npm install
 ```
 
 2. Run the application:
-   2a. Development mode:
+
+2a. Development mode:
 
 ```bash
 npm run dev
@@ -67,7 +68,7 @@ npm run start
 
 ## Project Structure
 
-- `/app`: Next.js 13+ app directory containing page components
+- `/app`: Next.js app directory containing page components
 - `/components`: Reusable React components
 - `/lib`: Utility functions, services, and GraphQL related code
 - `/styles`: Global styles and CSS modules
