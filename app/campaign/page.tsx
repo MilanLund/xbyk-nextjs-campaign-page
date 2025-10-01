@@ -1,4 +1,4 @@
-import { ApolloError } from '@apollo/client';
+import { CombinedGraphQLErrors } from '@apollo/client';
 import { JSX } from 'react';
 import { BannerComponent } from '../../components/banner/banner.component';
 import { CampaignPageQuery } from '../../lib/graphql/models/types';
@@ -10,7 +10,7 @@ import NotFound from '../not-found';
 export default async function CampaignPage(): Promise<JSX.Element> {
     try {
         const data = await fetchCampaignData();
-        const banner = data.dancingGoatCampaignPage?.banner?.items[0];
+        const banner = data?.dancingGoatCampaignPage?.banner?.items[0];
 
         if (!banner) {
             return <></>;
@@ -18,7 +18,7 @@ export default async function CampaignPage(): Promise<JSX.Element> {
 
         return <BannerComponent item={banner} />;
     } catch (error) {
-        if (error instanceof ApolloError) {
+        if (CombinedGraphQLErrors.is(error)) {
             throw error;
         }
 
@@ -27,7 +27,7 @@ export default async function CampaignPage(): Promise<JSX.Element> {
     }
 }
 
-async function fetchCampaignData(): Promise<CampaignPageQuery> {
+async function fetchCampaignData(): Promise<CampaignPageQuery | undefined> {
     const { data } = await apolloService.query<CampaignPageQuery>({ query: campaignPageQuery });
     return data;
 }
