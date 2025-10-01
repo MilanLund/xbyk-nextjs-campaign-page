@@ -1,0 +1,10 @@
+schema:
+    - '<XBYK_HOST><XBYK_GRAPHQL_ENDPOINT_PATH>': # Replace with your GraphQL endpoint
+          headers:
+              Authorization: 'Bearer <XBYK_GRAPHQL_API_KEY>' # If authentication is needed
+documents: 'lib/graphql/queries/**/*.graphql' # Path to your GraphQL operations
+generates:
+    lib/graphql/models/types.ts:
+        plugins:
+            - 'typescript'
+            - 'typescript-operations'
